@@ -1,3 +1,4 @@
+from django.http import HttpResponseBadRequest
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,8 +26,10 @@ class NameCheck(APIView):
             if check_name == name:
                 queryset = queryset.filter(character_name=name.capitalize())
                 if len(queryset) > 0:
-                    return Response(
+                    return HttpResponseBadRequest(
                         f"There is already a character named: {name} in the database"
                     )
+                else:
+                    return Response(f"Name is available")
             else:
-                return Response(check_name)
+                return HttpResponseBadRequest(check_name)
