@@ -2,6 +2,7 @@ from django.http import HttpResponseBadRequest
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 
 from .bad_words import check_text
 from .models import Character
@@ -13,13 +14,14 @@ class ListCharacter(generics.ListAPIView):
     serializer_class = CharacterSerializer
 
 
-class DetailCharacter(generics.RetrieveAPIView):
+class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
     queryset = Character.objects.all()
     serializer_class = CharacterSerializer
 
 
 class NameCheck(APIView):
     def get(self, request, name: str):
+        success_name = {"name": name.capitalize()}
         queryset = Character.objects.all()
         if name is not None:
             check_name = check_text(name)
@@ -30,6 +32,11 @@ class NameCheck(APIView):
                         f"There is already a character named: {name} in the database"
                     )
                 else:
-                    return Response(f"Name is available")
+                    return Response(success_name)
             else:
                 return HttpResponseBadRequest(check_name)
+
+
+class NewCharacter(CreateAPIView):
+    queryset = Character.objects.all()
+    serializer_class = CharacterSerializer
