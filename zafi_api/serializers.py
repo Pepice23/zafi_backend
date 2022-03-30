@@ -11,4 +11,5 @@ class CharacterSerializer(serializers.ModelSerializer):
             "character_faction",
             "character_race",
             "character_class",
+            "race_uid",
         )
