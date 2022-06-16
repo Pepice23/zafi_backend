@@ -24,14 +24,17 @@ class OfficeUpgrade(models.Model):
     add_money_per_sec = models.IntegerField(
         verbose_name="Add money per second:", default=0
     )
-    add_work_per_sec = models.IntegerField(
+    do_work_per_sec = models.IntegerField(
         verbose_name="Add work per second:", default=0
     )
     add_money_per_click = models.IntegerField(
         verbose_name="Add money per click:", default=0
     )
-    add_work_per_click = models.IntegerField(
+    do_work_per_click = models.IntegerField(
         verbose_name="Add work per click:", default=0
     )
     office_upgrade_timer = models.IntegerField(verbose_name="Timer:", default=0)
     office_upgrade_name = models.CharField(max_length=32, verbose_name="Upgrade name:")
+
+    def __str__(self):
+        return self.office_upgrade_name
