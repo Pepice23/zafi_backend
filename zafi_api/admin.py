@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from .models import Character
 from .models import OfficeUpgrade
+from .models import UserProfile
+from .models import UserProfileOfficeUpgrade
 
 
 class CharacterAdmin(admin.ModelAdmin):
@@ -16,3 +18,5 @@ class CharacterAdmin(admin.ModelAdmin):
 
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(OfficeUpgrade)
+admin.site.register(UserProfile)
+admin.site.register(UserProfileOfficeUpgrade)
