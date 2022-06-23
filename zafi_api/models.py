@@ -1,7 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Character(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Owner")
     character_name = models.CharField(
         max_length=32, primary_key=True, unique=True, verbose_name="Character name:"
     )

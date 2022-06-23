@@ -10,8 +10,15 @@ from .serializers import CharacterSerializer
 
 
 class ListCharacter(generics.ListAPIView):
-    queryset = Character.objects.all()
     serializer_class = CharacterSerializer
+
+    def get_queryset(self):
+        print(self.request.user, self.request.user.id)
+        if self.request.user.id is None:
+            return Character.objects.none()
+        characters = Character.objects.filter(owner=self.request.user)
+        print(characters)
+        return characters
 
 
 class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
@@ -21,6 +28,7 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
 
 class NameCheck(APIView):
     def get(self, request, name: str):
+        request.user
         success_name = {"name": name.capitalize()}
         queryset = Character.objects.all()
         if name is not None:
