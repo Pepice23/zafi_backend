@@ -95,7 +95,7 @@ WSGI_APPLICATION = "zafi_backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "zafi.db",
+        "NAME": BASE_DIR / "zafi_main.db",
     }
 }
 
