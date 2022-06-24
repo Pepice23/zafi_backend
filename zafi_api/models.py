@@ -8,6 +8,9 @@ class UserProfileOfficeUpgrade(models.Model):
     user_profile = models.ForeignKey("UserProfile", on_delete=models.CASCADE)
     office_upgrade = models.ForeignKey("OfficeUpgrade", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user_profile.user} - {self.office_upgrade.office_upgrade_name}"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
@@ -24,6 +27,9 @@ class UserProfile(models.Model):
         if created:
             UserProfile.objects.create(user=instance)
         instance.userprofile.save()
+
+    def __str__(self):
+        return self.user.username
 
 
 class Character(models.Model):
