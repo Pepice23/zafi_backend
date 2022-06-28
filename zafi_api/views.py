@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 
 from .bad_words import check_text
-from .models import Character, User
+from .models import Character
 from .serializers import CharacterSerializer
 
 
@@ -21,7 +21,7 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CharacterSerializer
 
 
-class CharacterNameCheck(APIView):
+class UserNameCheck(APIView):
     def get(self, request, name: str):
         queryset = User.objects.all()
         if name is not None:
@@ -36,10 +36,10 @@ class CharacterNameCheck(APIView):
             return HttpResponseBadRequest(name)
 
 
-class UserNameCheck(APIView):
+class CharacterNameCheck(APIView):
     def get(self, request, name: str):
         success_name = {"name": name.capitalize()}
-        queryset = User.objects.all()
+        queryset = Character.objects.all()
         if name is not None:
             check_name = check_text(name)
             if check_name == name:
