@@ -1,4 +1,6 @@
 from django.http import HttpResponseBadRequest
+from django.contrib.auth.models import User
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,20 +23,17 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
 
 class NameCheck(APIView):
     def get(self, request, name: str):
-        success_name = {"name": name.capitalize()}
-        queryset = Character.objects.all()
+        queryset = User.objects.all()
         if name is not None:
-            check_name = check_text(name)
-            if check_name == name:
-                queryset = queryset.filter(character_name=name.capitalize())
-                if len(queryset) > 0:
-                    return HttpResponseBadRequest(
-                        f"There is already a character named: {name} in the database"
-                    )
-                else:
-                    return Response(success_name)
+            queryset = queryset.filter(username=name)
+            if len(queryset) > 0:
+                return HttpResponseBadRequest(
+                    f"There is already a user named: {name} in the database"
+                )
             else:
-                return HttpResponseBadRequest(check_name)
+                return Response(name)
+        else:
+            return HttpResponseBadRequest(name)
 
 
 class NewCharacter(CreateAPIView):
