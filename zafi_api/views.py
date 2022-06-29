@@ -25,15 +25,17 @@ class UserNameCheck(APIView):
     def get(self, request, name: str):
         queryset = User.objects.all()
         if name is not None:
-            queryset = queryset.filter(username=name)
-            if len(queryset) > 0:
-                return HttpResponseBadRequest(
-                    f"There is already a user named: {name} in the database"
-                )
+            check_name = check_text(name.lower())
+            if check_name == name:
+                queryset = queryset.filter(username=name.lower())
+                if len(queryset) > 0:
+                    return HttpResponseBadRequest(
+                        f"There is already a username: {name} in the database"
+                    )
+                else:
+                    return Response(name)
             else:
-                return Response(name)
-        else:
-            return HttpResponseBadRequest(name)
+                return HttpResponseBadRequest(check_name)
 
 
 class CharacterNameCheck(APIView):
