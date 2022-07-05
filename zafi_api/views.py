@@ -23,28 +23,30 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
 
 class UserNameCheck(APIView):
     def get(self, request, name: str):
+        success_name = {"username": name.lower()}
         queryset = User.objects.all()
         if name is not None:
-            check_name = check_text(name.lower())
-            if check_name == name:
+            check_name = check_text(name)
+            if not check_name:
                 queryset = queryset.filter(username=name.lower())
                 if len(queryset) > 0:
                     return HttpResponseBadRequest(
                         f"There is already a username: {name} in the database"
                     )
                 else:
-                    return Response(name)
+                    return Response(success_name)
             else:
-                return HttpResponseBadRequest(check_name)
+                return HttpResponseBadRequest("Contains profanity")
 
 
 class CharacterNameCheck(APIView):
     def get(self, request, name: str):
+        name = name.lower()
         success_name = {"name": name.capitalize()}
         queryset = Character.objects.all()
         if name is not None:
             check_name = check_text(name)
-            if check_name == name:
+            if not check_name:
                 queryset = queryset.filter(character_name=name.capitalize())
                 if len(queryset) > 0:
                     return HttpResponseBadRequest(
@@ -53,7 +55,7 @@ class CharacterNameCheck(APIView):
                 else:
                     return Response(success_name)
             else:
-                return HttpResponseBadRequest(check_name)
+                return HttpResponseBadRequest("Contains profanity")
 
 
 class NewCharacter(CreateAPIView):
