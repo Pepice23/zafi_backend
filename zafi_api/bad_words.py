@@ -505,6 +505,6 @@ bad_words = [
 def check_text(text):
     for bad_word in bad_words:
         if bad_word in text.lower():
-            return "Name contains profanity"
+            return True
     else:
-        return text
+        return False
