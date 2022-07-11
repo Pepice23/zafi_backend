@@ -5,12 +5,14 @@ from .views import (
     CharacterNameCheck,
     NewCharacter,
     UserNameCheck,
+    EmailCheck,
 )
 
 urlpatterns = [
     path("character/new/", NewCharacter.as_view(), name="newcharacter"),
     path("namecheck/<str:name>", CharacterNameCheck.as_view(), name="name_check"),
     path("usernamecheck/<str:name>", UserNameCheck.as_view(), name="username_check"),
+    path("emailcheck/<str:email>", EmailCheck.as_view(), name="email_check"),
     path("<str:pk>/", DetailCharacter.as_view(), name="character_detail"),
     path("", ListCharacter.as_view(), name="character_list"),
 ]

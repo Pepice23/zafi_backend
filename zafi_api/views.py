@@ -21,6 +21,22 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CharacterSerializer
 
 
+class EmailCheck(APIView):
+    def get(self, request, email: str):
+        success_email = {"email": email}
+        queryset = User.objects.all()
+        if email is not None:
+            queryset = queryset.filter(email=email)
+            if len(queryset) > 0:
+                return HttpResponseBadRequest(
+                    f"There is already a user with {email} email address in the database"
+                )
+            else:
+                return Response(success_email)
+        else:
+            return HttpResponseBadRequest("Email is not valid")
+
+
 class UserNameCheck(APIView):
     def get(self, request, name: str):
         success_name = {"username": name.lower()}
