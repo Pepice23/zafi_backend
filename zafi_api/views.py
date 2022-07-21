@@ -1,4 +1,6 @@
 from django.http import HttpResponseBadRequest
+from django.contrib.auth.models import User
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -26,14 +28,48 @@ class DetailCharacter(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CharacterSerializer
 
 
-class NameCheck(APIView):
+class EmailCheck(APIView):
+    def get(self, request, email: str):
+        success_email = {"email": email}
+        queryset = User.objects.all()
+        if email is not None:
+            queryset = queryset.filter(email=email)
+            if len(queryset) > 0:
+                return HttpResponseBadRequest(
+                    f"There is already a user with {email} email address in the database"
+                )
+            else:
+                return Response(success_email)
+        else:
+            return HttpResponseBadRequest("Email is not valid")
+
+
+class UserNameCheck(APIView):
     def get(self, request, name: str):
-        request.user
+        success_name = {"username": name.lower()}
+        queryset = User.objects.all()
+        if name is not None:
+            check_name = check_text(name)
+            if not check_name:
+                queryset = queryset.filter(username=name.lower())
+                if len(queryset) > 0:
+                    return HttpResponseBadRequest(
+                        f"There is already a username: {name} in the database"
+                    )
+                else:
+                    return Response(success_name)
+            else:
+                return HttpResponseBadRequest("Contains profanity")
+
+
+class CharacterNameCheck(APIView):
+    def get(self, request, name: str):
+        name = name.lower()
         success_name = {"name": name.capitalize()}
         queryset = Character.objects.all()
         if name is not None:
             check_name = check_text(name)
-            if check_name == name:
+            if not check_name:
                 queryset = queryset.filter(character_name=name.capitalize())
                 if len(queryset) > 0:
                     return HttpResponseBadRequest(
@@ -42,7 +78,7 @@ class NameCheck(APIView):
                 else:
                     return Response(success_name)
             else:
-                return HttpResponseBadRequest(check_name)
+                return HttpResponseBadRequest("Contains profanity")
 
 
 class NewCharacter(CreateAPIView):

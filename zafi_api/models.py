@@ -65,6 +65,7 @@ class OfficeUpgrade(models.Model):
     )
     office_upgrade_timer = models.IntegerField(verbose_name="Timer:", default=0)
     office_upgrade_name = models.CharField(max_length=32, verbose_name="Upgrade name:")
+    # TODO: Add upgrade_level
 
     def __str__(self):
         return self.office_upgrade_name
